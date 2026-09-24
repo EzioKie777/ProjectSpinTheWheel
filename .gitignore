@@ -1,0 +1,22 @@
+# Code::Blocks output & user files
+bin/
+obj/
+*.layout
+*.depend
+
+# CMake output
+build/
+cmake-build-*/
+
+# IDE settings
+.vscode/
+
+# Windows Executables & DLLs generated during local build
+*.exe
+*.dll
+*.lib
+*.a
+
+# OS files
+Thumbs.db
+.DS_Store
