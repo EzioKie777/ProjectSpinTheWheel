@@ -986,6 +986,12 @@ int main()
                         {
                             contestants.clear();
                             pendingRigTarget = -1;
+                            winnerIndex = -1;
+                            wasRigged = false;
+                            state = AppState::IDLE;
+                            resultTimer = 0.f;
+                            confettiSpawned = false;
+                            particles.clear();
                         }
                         else if (state != AppState::SPINNING)
                         {
@@ -995,6 +1001,14 @@ int main()
                                 {
                                     contestants.erase(contestants.begin() + i);
                                     pendingRigTarget = -1; // indices may have shifted
+                                    winnerIndex = -1;
+                                    if (contestants.empty())
+                                    {
+                                        state = AppState::IDLE;
+                                        resultTimer = 0.f;
+                                        confettiSpawned = false;
+                                        particles.clear();
+                                    }
                                     break;
                                 }
                             }
