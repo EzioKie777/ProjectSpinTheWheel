@@ -6,7 +6,26 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(SFML 3 REQUIRED COMPONENTS Graphics Window System)
+option(USE_SYSTEM_SFML "Use an installed SFML package instead of fetching it" ON)
+
+if(USE_SYSTEM_SFML)
+    find_package(SFML 3 CONFIG QUIET COMPONENTS Graphics Window System)
+endif()
+
+if(NOT SFML_FOUND)
+    include(FetchContent)
+
+    set(SFML_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(SFML_BUILD_TEST_SUITE OFF CACHE BOOL "" FORCE)
+    set(SFML_BUILD_DOC OFF CACHE BOOL "" FORCE)
+
+    FetchContent_Declare(SFML
+        GIT_REPOSITORY https://github.com/SFML/SFML.git
+        GIT_TAG 3.1.0
+        GIT_SHALLOW TRUE
+    )
+    FetchContent_MakeAvailable(SFML)
+endif()
 
 add_executable(SpinTheWheel main.cpp)
 target_link_libraries(SpinTheWheel PRIVATE SFML::Graphics SFML::Window SFML::System)
@@ -24,12 +43,12 @@ foreach(asset IN LISTS RUNTIME_ASSETS)
     )
 endforeach()
 
-if(WIN32 AND DEFINED SFML_RUNTIME_DIR)
-    foreach(dll IN ITEMS sfml-graphics-3.dll sfml-window-3.dll sfml-system-3.dll)
+if(WIN32)
+    foreach(sfml_target IN ITEMS SFML::Graphics SFML::Window SFML::System)
         add_custom_command(TARGET SpinTheWheel POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${SFML_RUNTIME_DIR}/${dll}"
-                "$<TARGET_FILE_DIR:SpinTheWheel>/${dll}"
+                "$<TARGET_FILE:${sfml_target}>"
+                "$<TARGET_FILE_DIR:SpinTheWheel>"
         )
     endforeach()
 endif()

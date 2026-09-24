@@ -1,0 +1,28 @@
+name: Build Windows
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -S . -B build -DUSE_SYSTEM_SFML=OFF
+
+      - name: Build Project
+        run: cmake --build build --config Release
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpinTheWheel-Windows
+          path: build/Release/

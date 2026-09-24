@@ -28,17 +28,18 @@ program attempts to use Arial instead.
 
 ## Build with CMake on Windows
 
-Install the SFML 3.1.0 development package and note its installation folder,
-for example `C:\libs\SFML-3.1.0`. That folder should contain `include`, `lib`,
-and `bin` directories.
+Install the SFML 3 development package and note its installation folder, for
+example `C:\libs\SFML-3.1.0`. That folder should contain `include`, `lib`, and
+`bin` directories. If SFML is not installed, CMake downloads SFML 3.1.0 from
+the official [SFML GitHub repository](https://github.com/SFML/SFML) during the
+first configure.
 
 From a Developer PowerShell in this repository:
 
 ```powershell
 cmake -S . -B build -G "MinGW Makefiles" `
 	-DCMAKE_CXX_COMPILER=C:/mingw64/bin/g++.exe `
-	-DCMAKE_PREFIX_PATH=C:/libs/SFML-3.1.0 `
-	-DSFML_RUNTIME_DIR=C:/libs/SFML-3.1.0/bin
+	-DCMAKE_PREFIX_PATH=C:/libs/SFML-3.1.0
 cmake --build build --config Release
 ```
 
@@ -46,9 +47,13 @@ The post-build step copies the fonts and SFML DLLs into the executable
 directory. If your SFML package uses a different folder layout, copy the three
 DLLs manually from its `bin` directory beside `SpinTheWheel.exe`.
 
+To force the GitHub download instead of using a local SFML installation, add
+`-DUSE_SYSTEM_SFML=OFF` to the configure command. The first configure requires
+an internet connection; subsequent builds use CMake's dependency cache.
+
 ## Build with Code::Blocks
 
-Use the SFML 3.1.0 MinGW package matching Code::Blocks' compiler:
+Use an SFML 3 MinGW package matching Code::Blocks' compiler:
 
 1. Add `<SFML>\include` to compiler search directories.
 2. Add `<SFML>\lib` to linker search directories.

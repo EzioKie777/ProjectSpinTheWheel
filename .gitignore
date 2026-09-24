@@ -7,6 +7,7 @@ obj/
 # CMake output
 build/
 cmake-build-*/
+build-*/
 
 # IDE settings
 .vscode/
