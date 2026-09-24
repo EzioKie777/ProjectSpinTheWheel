@@ -1018,6 +1018,9 @@ int main()
             }
         }
 
+        // Events may have changed the contestant count or input mode.
+        ui = computePanelLayout(contestants.size(), inputMode == InputMode::ADD_NAME);
+
         if (state == AppState::SPINNING)
         {
             spinTimer += dt;
